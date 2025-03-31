@@ -3,9 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/form.css">
     <title>Kursformulär</title>
 </head>
 <body>
-    <h1>Kursformulär</h1>
+    <main>
+        <h1>Kursformulär</h1>
+        <form method="post" action="/courseform">
+            <fieldset>
+                <legend>Lägg till ny kurs</legend>
+                <div class="inputs">
+                   
+                    <label>
+                        <span>Kurskod:</span>
+                        <input type="text" name="coursecode" id="coursecode" value="<%= formData.code || '' %>">
+                    </label>
+                    <label>
+                        <span>Kursnamn:</span>
+                        <input type="text" name="coursename" id="coursename" value="<%= formData.name || '' %>">
+                    </label>
+                    <label>
+                        <span>Progression:</span>
+                        <input type="text" name="progression" id="progression" value="<%= formData.progression || '' %>">
+                    </label>
+                    <label>
+                        <span>Länk:</span>
+                        <input type="url" name="courseurl" id="courseurl" value="<%= formData.syllabus || '' %>">
+                    </label> 
+                </div>
+                <div class="errors">
+                    <% if (errors.length > 0) { %>
+                       <% errors.forEach(error => { %>
+                            <article>
+                                <h2><%= error.name %></h2>
+                                <p><%= error.message %></p>
+                            </article>
+                       <% }); %>
+                    <% }%>
+                </div>
+                <label class="label-submit">
+                    <span>Vill du lägga till den nya kursen?</span>
+                    <input type="submit" name="submit" id="submit">
+                </label>
+            </fieldset>
+        </form>
+    </main>
 </body>
 </html>
