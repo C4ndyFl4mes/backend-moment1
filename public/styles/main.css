@@ -50,7 +50,6 @@ header {
 }
 .menu>ul>li>a {
     flex: 1;
-    /* background-color: red; */
     text-decoration: none;
     color: black;
 }

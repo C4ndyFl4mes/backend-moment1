@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/about.css">
     <title>Om</title>
 </head>
+
 <body>
     <header>
         <div class="top">
@@ -25,6 +28,31 @@
             </ul>
         </nav>
     </header>
-    <h1>Om</h1>
+    <main>
+        <h1>Om</h1>
+        <article>
+            <h2>Beskrivning</h2>
+            <p>Webbplatsen hanterar kurser från en databas som använder PostgreSQL och ligger på Renders servrar gratis.
+                Databasen är normaliserad och har därför en separat tabell av progression. Det finns lägga till,
+                uppdatera och radera funktioner.
+                Lägga till och uppdatera har var sin sida för sina formulär medans radera knappen ligger direkt i
+                tabellen. Uppdatera, radera och öppna länk knapparna syns vid hover i tabellen på kurser sidan.
+            </p>
+        </article>
+        <article>
+            <h2>Syfte</h2>
+            <p>Syftet var att användare ska kunna hantera kurser som ligger i en databas. Det vill säga att kunna lista,
+                lägga till, ändra och radera.</p>
+        </article>
+        <article>
+            <h2>Slutsats</h2>
+            <p>Det var kul att kunna hantera innehållet i en tabell i en databas utefter ett formulär. Jag har gjort
+                liknande i gymnasiet med PHP och MySQL, det var mycket lättare med Express, EJS och PostgreSQL.
+                Framförallt att handera queries och skriva ut felmeddelanden. Nu är väl jag inte så bra på PHP och det
+                kanske går att göra detta, men det kändes skönt att enkelt kunna validera inmatningsfälten och vid fel
+                bara ladda om sidan, fylla fälten och skriva ut felmeddelanden.</p>
+        </article>
+    </main>
 </body>
+
 </html>
