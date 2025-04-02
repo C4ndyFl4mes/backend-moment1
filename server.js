@@ -29,11 +29,28 @@ db_client.connect((error) => {
 
 // Routing
 app.get("/", async (req, res) => {
-    res.render("index");
+    db_client.query(`SELECT * FROM Courses INNER JOIN Progressions ON Courses.progressID = Progressions.progressID;`, (error, result) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.render("index", {
+                courses: result.rows
+            });
+        }
+    });
+});
+
+app.post("/", async (req, res) => {
+    const id = req.body.courseid;
+    console.log(id);
+    const result = await db_client.query(`
+        DELETE FROM Courses WHERE courseID = $1;
+    `, [id]);
+    res.redirect("/");
 });
 
 app.get("/courseform", async (req, res) => {
-    res.render("courseform", { errors: [], formData: {code: "", name: "", progression: "", syllabus: ""} });
+    res.render("courseform", { errors: [], formData: { code: "", name: "", progression: "", syllabus: "" } });
 });
 
 app.post("/courseform", async (req, res) => {
@@ -64,7 +81,7 @@ app.post("/courseform", async (req, res) => {
             message: `Kurskoder måste vara unika, en kurs med kurskoden ${formData.code} existrerar redan!`
         });
     }
-    
+
     // Kollar om det är ett korrekt värde i progression.
     if (progressions.indexOf(req.body.progression) === -1 && req.body.progression != "") {
         errors.push({
@@ -73,16 +90,16 @@ app.post("/courseform", async (req, res) => {
         });
     }
 
-    
+
     // Kollar att errors är tom innan det läggs in i tabellen. 
     // Om den inte är tom, skickas inte informationen utan den returnerar felmeddelanden och den inmatade informationen till formulärsidan.
     if (errors.length == 0) {
-        const progressID = progressions.indexOf(formData.progression) + 1; 
+        const progressID = progressions.indexOf(formData.progression) + 1;
         const result = await db_client.query(`
             INSERT INTO Courses (courseCode, courseName, syllabus, progressID)
             VALUES($1, $2, $3, $4)
             `, [formData.code, formData.name, formData.syllabus, progressID]);
-        res.render("courseform", { errors: [], formData: {code: "", name: "", progression: "", syllabus: ""} });
+        res.render("courseform", { errors: [], formData: { code: "", name: "", progression: "", syllabus: "" } });
         res.redirect("/");
     } else {
         return res.render("courseform", { errors: errors, formData: formData });
@@ -94,7 +111,7 @@ app.post("/courseform", async (req, res) => {
  * @param {object} dataFrom - formulärinformation
  * @returns {object | null} error meddelande.
  */
-function tooManyCharacters (dataFrom) {
+function tooManyCharacters(dataFrom) {
     const fields = [];
     let fieldsText = "";
 
@@ -111,7 +128,7 @@ function tooManyCharacters (dataFrom) {
     if (fields.length > 0) {
         for (let i = 0; i < fields.length; i++) {
             if (i == 0) {
-                fieldsText += fields[i]; 
+                fieldsText += fields[i];
             } else if (i == 1 && i < fields.length - 1) {
                 fieldsText += `, ${fields[i]}`;
             } else if (i == fields.length - 1) {
@@ -133,7 +150,7 @@ function tooManyCharacters (dataFrom) {
  * @param {object} dataForm - formulärinformation
  * @returns {object | null} - error meddelande.
  */
-function emptyFields (dataForm) {
+function emptyFields(dataForm) {
     const fields = [];
     let fieldsText = "";
 
@@ -153,7 +170,7 @@ function emptyFields (dataForm) {
     if (fields.length > 0) {
         for (let i = 0; i < fields.length; i++) {
             if (i == 0) {
-                fieldsText += fields[i]; 
+                fieldsText += fields[i];
             } else if (i == 1 && i < fields.length - 1) {
                 fieldsText += `, ${fields[i]}`;
             } else if (i == fields.length - 1) {
@@ -167,7 +184,7 @@ function emptyFields (dataForm) {
     } else {
         return null;
     }
-    
+
 }
 
 /**
@@ -175,14 +192,88 @@ function emptyFields (dataForm) {
  * @param {string} code - kurskod
  * @returns {boolean} om kurskoden är unik eller inte.
  */
-async function isCodeUnique (code) {
+async function isCodeUnique(code) {
     const result = await db_client.query(`
         SELECT courseCode FROM Courses WHERE courseCode = $1;    
     `, [code]);
-
     return result.rows.length != 0;
 }
 
+async function isCodeUnique2(code, id) {
+    const result = await db_client.query(`
+        SELECT courseCode FROM Courses WHERE courseCode = $1 AND courseID != $2;    
+    `, [code, id]);
+    console.log(result.rows.length !== 0);
+    return result.rows.length !== 0;
+}
+
+app.post("/updateform", async (req, res) => {
+    const progressions = ["A", "B", "C"];
+    if (req.body.formType === "go_to_update_form") {
+        const id = req.body.courseid;
+        const result = await db_client.query(`
+            SELECT * FROM Courses WHERE courseid = $1;
+        `, [id]);
+
+        const formData = {
+            id: id,
+            code: result.rows[0].coursecode,
+            name: result.rows[0].coursename,
+            progression: progressions[result.rows[0].progressid - 1],
+            syllabus: result.rows[0].syllabus
+        };
+        console.log(formData);
+        res.render("updateform", { errors: [], formData: formData });
+    } else if (req.body.formType === "update_form") {
+        const formData = {
+            id: req.body.courseid,
+            code: req.body.coursecode,
+            name: req.body.coursename,
+            progression: req.body.progression,
+            syllabus: req.body.courseurl
+        };
+        const errors = [];
+
+        const fieldsEmpty = emptyFields(formData); // Lagrar tommafält error eller null vid inga tomma fält.
+        const tooManyCharsFields = tooManyCharacters(formData); // Lagrar för många tecken error eller null vid inga för många tecken.
+
+        // Kollar om det finns errors lagrade.
+        if (fieldsEmpty) {
+            errors.push(fieldsEmpty);
+        }
+        if (tooManyCharsFields) {
+            errors.push(tooManyCharsFields);
+        }
+        
+        // Kollar om kurskoden är unik.
+        if (await isCodeUnique2(formData.code, formData.id)) {
+            errors.push({
+                name: "Kurskod är inte unikt",
+                message: `Kurskoder måste vara unika, en kurs med kurskoden ${formData.code} existrerar redan!`
+            });
+        }
+        // Kollar om det är ett korrekt värde i progression.
+        if (progressions.indexOf(formData.progression) === -1 && formData.progression != "") {
+            errors.push({
+                name: "Otillåtet värde i progression",
+                message: `Det otillåtna värdet, ${req.body.progression}, måste vara antigen A, B eller C!`
+            });
+        }
+        if (errors.length == 0) {
+            const progressID = progressions.indexOf(formData.progression) + 1;
+        
+            const result = await db_client.query(`
+                UPDATE Courses SET coursecode = $1, coursename = $2, progressID = $3, syllabus = $4 WHERE courseid = $5;
+            `, [formData.code, formData.name, progressID, formData.syllabus, formData.id]);
+            res.redirect("/");
+            res.render("updateform", { errors: [], formData: { id: "", code: "", name: "", progression: "", syllabus: "" } });
+        } else {
+            return res.render("updateform", { errors: errors, formData: formData });
+        }
+    } else {
+        console.log("Stavade fel på formType i formuläret.");
+    }
+});
 
 app.get("/about", async (req, res) => {
     res.render("about");

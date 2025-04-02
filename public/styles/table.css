@@ -1,0 +1,49 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+
+    font-size: 1.2rem;
+    color: #000000;
+    background-color: #AAA;
+}
+thead>tr>th {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row {
+    background-color: #AAA;
+    border: 2px solid black;
+    line-height: 2rem;
+    user-select: none;
+}
+
+.row>td {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.subrow {
+    display: none;
+    border: 2px solid black;
+}
+
+.subrow>td>form>input,
+.subrow>td>button{
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.row:hover + .subrow,
+.subrow:hover{
+    display: table-row;
+    border-top: none;
+    background-color: #888;
+}
+
+.row:hover,
+.row:has(+ .subrow:hover) {
+    background-color: #888;
+    border-bottom: none;
+    font-weight: 700;
+}

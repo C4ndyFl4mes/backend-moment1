@@ -10,11 +10,12 @@
 <body>
     <main>
         <h1>Kursformulär</h1>
-        <form method="post" action="/courseform">
+        <form method="post" action="/updateform">
             <fieldset>
-                <legend>Lägg till ny kurs</legend>
+                <legend>Uppdatera</legend>
                 <div class="inputs">
-                   
+                    <input type="text" name="formType" value="update_form" style="display: none;">
+                    <input type="number" name="courseid" value="<%= formData.id || '' %>" style="display: none;">
                     <label>
                         <span>Kurskod:</span>
                         <input type="text" name="coursecode" id="coursecode" value="<%= formData.code || '' %>">
@@ -43,7 +44,7 @@
                     <% }%>
                 </div>
                 <label class="label-submit">
-                    <span>Vill du lägga till den nya kursen?</span>
+                    <span>Vill du uppdatera den här kursen?</span>
                     <input type="submit" name="submit" id="submit">
                 </label>
             </fieldset>

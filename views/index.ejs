@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/table.css">
+    <script src="/scripts/main.js" defer></script>
     <title>Kurser</title>
 </head>
 <body>
@@ -17,6 +19,47 @@
             </ul>
         </nav>
     </header>
-    <h1>Kurser</h1>
+    <main>
+        <h1>Kurser</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kurskod</th>
+                    <th>Kursnamn</th>
+                    <th>Progression</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (courses.length > 0) { %>
+                    <% courses.forEach((course) => { %>
+                        <tr class="row">
+                            <td><%= course.coursecode %></td>
+                            <td><%= course.coursename %></td>
+                            <td><%= course.progression %></td>
+                        </tr>
+                        <tr class="subrow">
+                            <td>
+                                <form method="post" action="/">
+                                    <input type="number" name="courseid" readonly value="<%= course.courseid %>" style="display: none;">
+                                    <input type="submit" name="courseremove" value="Radera">
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" action="/updateform">
+                                    <input type="text" name="formType" value="go_to_update_form" style="display: none;">
+                                    <input type="number" name="courseid" readonly value="<%= course.courseid %>" style="display: none;">
+                                    <input type="submit" name="courseupdate" value="Uppdatera">
+                                </form></td>
+                            <td><button type="button" onclick="window.open('<%= course.syllabus %>', '_blank');">Länk</button></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="3">Det finns inga kurser att hämta.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </main>
 </body>
 </html>
