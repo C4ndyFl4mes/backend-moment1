@@ -4,18 +4,19 @@ table {
 
     font-size: 1.2rem;
     color: #000000;
-    background-color: #AAA;
+    /* background-color: #AAA; */
 }
+
 thead>tr>th {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 0.5rem;
 }
 
 .row {
-    background-color: #AAA;
+    background-color: #BABABA;
     border: 2px solid black;
     line-height: 2rem;
     user-select: none;
+    transition: 0.2s background-color;
 }
 
 .row>td {
@@ -26,24 +27,34 @@ thead>tr>th {
 .subrow {
     display: none;
     border: 2px solid black;
+    transition: 0.2s background-color;
 }
 
 .subrow>td>form>input,
-.subrow>td>button{
+.subrow>td>button {
     font-size: 1rem;
     cursor: pointer;
 }
 
-.row:hover + .subrow,
-.subrow:hover{
+.row:hover+.subrow,
+.subrow:hover {
     display: table-row;
     border-top: none;
-    background-color: #888;
+    background-color: #CCC;
 }
 
 .row:hover,
 .row:has(+ .subrow:hover) {
-    background-color: #888;
+    background-color: #CCC;
     border-bottom: none;
     font-weight: 700;
+}
+
+@media screen and (max-width: 500px) {
+
+    .row,
+    .subrow {
+        border-left: 0;
+        border-right: 0;
+    }
 }

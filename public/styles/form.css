@@ -1,6 +1,19 @@
-
+form {
+    padding: 0.5rem;
+    background-color: #BABABA;
+    border-radius: 20px;
+}
+fieldset {
+    
+    border: 0;
+}
+legend {
+    margin: 0 auto;
+    font-size: 1.3rem;
+}
 
 .inputs {
+    margin-top: 1rem;
     margin-bottom: 2rem;
 
     display: flex;
@@ -9,13 +22,22 @@
 
     gap: 1rem;
 }
-
+label {
+    font-size: 1.1rem;
+}
 .inputs>label {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
-
+input {
+    background-color: #EEE;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+}
+input[type="submit"]:hover {
+    background-color: #E4E4E4;
+}
 .label-submit {
     width: fit-content;
 
@@ -33,4 +55,10 @@
 
 .errors>article>h2 {
     font-size: 1.3rem;
+}
+@media screen and (max-width: 500px) {
+    form {
+        border-radius: 0px;
+    }
+
 }

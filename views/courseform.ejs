@@ -5,9 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/main.css">
     <link rel="stylesheet" href="/styles/form.css">
-    <title>Kursformulär</title>
+    <title>Lägg till kurs</title>
 </head>
 <body>
+    <header>
+        <div class="top">
+            <p>Server-baserad webbutveckling Moment 1 - Isaac Svedin</p>
+        </div>
+        <nav class="menu">
+            <ul>
+                <li>
+                    <a href="/">Kurser</a>
+                </li>
+                <li class="here">
+                    <a href="/courseform">Ny kurs</a>
+                </li>
+                <li>
+                    <a href="/about">Om</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
     <main>
         <h1>Kursformulär</h1>
         <form method="post" action="/courseform">
@@ -44,7 +62,7 @@
                 </div>
                 <label class="label-submit">
                     <span>Vill du lägga till den nya kursen?</span>
-                    <input type="submit" name="submit" id="submit">
+                    <input type="submit" name="submit" id="submit" value="Lägg till">
                 </label>
             </fieldset>
         </form>
