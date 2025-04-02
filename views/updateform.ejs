@@ -10,11 +10,10 @@
 <body>
     <main>
         <h1>Kursformulär</h1>
-        <form method="post" action="/updateform">
+        <form method="post" action="/update">
             <fieldset>
                 <legend>Uppdatera</legend>
                 <div class="inputs">
-                    <input type="text" name="formType" value="update_form" style="display: none;">
                     <input type="number" name="courseid" value="<%= formData.id || '' %>" style="display: none;">
                     <label>
                         <span>Kurskod:</span>
